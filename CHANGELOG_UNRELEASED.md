@@ -55,7 +55,7 @@
   + lemma `abse_EFin`
 
 - in `normedtype.v`:
-  + lemmas `bounded_cst`, `cvgr_sub0`
+  + lemmas `bounded_cst`, `subr_cvg0`
 
 - in `lebesgue_integral.v`:
   + lemma `RintegralB`
@@ -118,6 +118,8 @@
   + `sigma_algebra_image_class` -> `sigma_algebra_image`
   + `sigma_algebra_preimage_classE` -> `g_sigma_preimageE`
   + `preimage_classes_comp` -> `g_sigma_preimageU_comp`
+- in `normedtype.v`:
+  + `cvge_sub0` -> `sube_cvg0`
 
 ### Generalized
 

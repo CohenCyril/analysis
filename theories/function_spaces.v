@@ -502,10 +502,8 @@ Context {T : choiceType} {U : completeType}.
 Lemma fun_complete (F : set_system (arrow_uniform_type T U))
   {FF :  ProperFilter F} : cauchy F -> cvg F.
 Proof.
-move=> Fc.
-have /(_ _) /cauchy_cvg /cvg_app_entourageP cvF : cauchy (@^~_ @ F).
-  move=> t A /= entA; rewrite near_simpl -near2E near_map2.
-  by apply: Fc; exists A.
+move=> Fc; have /(_ _) /cauchy_cvg /cvg_app_entourageP cvF : cauchy (@^~_ @ F).
+  by move=> t A /= entA; rewrite near_simpl -near2E near_map2; apply: Fc; exists A.
 apply/cvg_ex; exists (fun t => lim (@^~t @ F)).
 apply/cvg_fct_entourageP => A entA; near=> f => t; near F => g.
 apply: (entourage_split (g t)) => //; first by near: g; apply: cvF.

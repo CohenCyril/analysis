@@ -6,7 +6,7 @@ From mathcomp Require Import pseudometric_structure order_topology compact.
 From mathcomp Require Import discrete_topology.
 
 (**md**************************************************************************)
-(* # Topology for boolean numbers                                             *)
+(* # Topology for booleans                                             *)
 (* This file equips bool with the discrete pseudometric.                      *)
 (******************************************************************************)
 

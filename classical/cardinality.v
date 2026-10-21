@@ -1,4 +1,5 @@
 (* mathcomp analysis (c) 2026 Inria and AIST. License: CeCILL-C.              *)
+Set Universe Polymorphism.
 From HB Require Import structures.
 From mathcomp Require Import boot order finmap ssralg ssrnum ssrint rat.
 From mathcomp Require Import boolp classical_sets functions.
@@ -458,7 +459,7 @@ Qed.
 
 Definition countable T (A : set T) := A #<= @setT nat.
 
-Lemma eq_countable T U (A : set T) (B : set U) :
+Lemma eq_countable@{u v} (T : Type@{u}) (U : Type@{v}) (A : set T) (B : set U) :
   A #= B -> countable A = countable B.
 Proof. by move=> /card_le_eql leA; rewrite /countable leA. Qed.
 
@@ -563,7 +564,8 @@ Proof. by move=> /finite_setP[n /eq_countable->]. Qed.
 Lemma infiniteP T (A : set T) : infinite_set A <-> [set: nat] #<= A.
 Proof.
 elim/Ppointed: T => T in A *.
-  by rewrite !emptyE; split=> // /(congr1 (@^~ 0%N))/=; rewrite propeqE => -[].
+rewrite !emptyE; split=> //.
+  by move=> /card_le0P /(congr1 (@^~ 0%N))/=; rewrite propeqE => -[].
 split=> [Ainfinite| + /finite_setP[n eqAI]]; last first.
   rewrite (card_le_eqr eqAI) => le_nat_n.
   suff: `I_n.+1 #<= `I_n by rewrite card_le_II ltnn.
@@ -998,7 +1000,7 @@ Lemma super_bij T U (X A : set T) (Y B : set U) (f : {bij X >-> Y}) :
   exists g : {bij A >-> B}, {in X, g =1 f}.
 Proof.
 elim/Ppointed: U => U in Y B f *.
-  rewrite !emptyE in f * => XA _; rewrite setD_eq0 => AX.
+  rewrite !emptyE in f * => XA _; rewrite !emptyE setD_eq0 => AX.
   by suff /seteqP->// : A `<=>` X by exists f.
 move=> XA YB /pcard_eqP[g].
 rewrite -(joinIB X A) -(joinIB Y B) !meetEset.
@@ -1012,7 +1014,7 @@ Lemma card_eq_fsetP {T : choiceType} {A : {fset T}} {n} :
   reflect (#|` A| = n) ([set` A] #= `I_n).
 Proof.
 elim/choicePpointed: T => T in A *.
-  rewrite -{1}[A]set_fsetK !emptyE fset_set0 cardfs0.
+  rewrite -{1}[A]set_fsetK !emptyE fset_set0 cardfs0 !emptyE.
   by apply: (iffP eqP) => [/IIn_eq0->//|<-]; rewrite II0.
 rewrite (card_eqr card_II) card_eq_sym.
 apply: (iffP pcard_eqP) => [[f]|]; last first.
@@ -1131,7 +1133,7 @@ Qed.
 #[deprecated(note="use countable0 instead")]
 Notation countable_set0 := countable0 (only parsing).
 
-Lemma countable1 T (x : T) : countable [set x].
+Lemma countable1@{u} (T : Type@{u}) (x : T) : countable [set x].
 Proof. exact: finite_set_countable. Qed.
 #[global] Hint Resolve countable1 : core.
 
@@ -1257,7 +1259,8 @@ Lemma eq_cardSP {T : Type} (A : set T) n :
   reflect (exists2 x, A x & A `\ x #= `I_n) (A #= `I_n.+1).
 Proof.
 elim/Ppointed: T A => T A.
-  rewrite !emptyE; apply: (iffP eqP) => [|[]//].
+  rewrite ![A]emptyE [_ #= _]emptyE.
+  apply: (iffP eqP) => [|[]//].
   by move=> /(congr1 (@^~ 0%N))/=; rewrite -falseE ltnS leq0n => /is_true_inj.
 apply: (iffP idP) => [|[x Ax]].
   move=> /ppcard_eqP[f]; exists (f^-1 n); first by apply: funS => /=.

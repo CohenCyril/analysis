@@ -82,8 +82,6 @@ Definition equivT_trans {S T U} : equivT S T -> equivT T U -> equivT S U :=
    equivT_transl \o equivT_sym.
 Definition equivT_transr {S T U} eqST : equivT U S -> equivT U T :=
    equivT_trans^~ eqST.
-Definition equivT_Prop (P Q : Prop) : (equivT P Q) <-> (equivT P Q).
-Proof. split; destruct 1; split; assumption. Defined.
 Definition equivT_LR {S T} (eq : equivT S T) : S -> T :=
   let: EquivT S_T _ := eq in S_T.
 Definition equivT_RL {S T} (eq : equivT S T) : T -> S :=

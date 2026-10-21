@@ -550,6 +550,7 @@ Proof.
 rewrite predeqE => A; split=> [Aop p Ap|Aop].
   by exists A; split=> //; split.
 suff -> : A = \bigcup_(B : {B : set T & op B /\ B `<=` A}) projT1 B.
+  apply op_bigU.
   by apply: op_bigU => B; have [] := projT2 B.
 rewrite predeqE => p; split=> [|[B _ Bp]]; last by have [_] := projT2 B; apply.
 by move=> /Aop [B [Bop Bp sBA]]; exists (existT _ B (conj Bop sBA)).
